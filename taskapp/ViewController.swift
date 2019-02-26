@@ -38,8 +38,16 @@ class ViewController: UIViewController , UITableViewDelegate , UITableViewDataSo
     let predicate = NSPredicate(format: "category = %@", searchBar.text! )
     taskArray = realm.objects(Task.self).filter(predicate)
     tableView.reloadData()
+    
+    if searchBar.text != "" {
+      let predicate = NSPredicate(format: "category = %@", searchBar.text! )
+      taskArray = realm.objects(Task.self).filter(predicate)
+      tableView.reloadData()
+    } else {
+      taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
+      tableView.reloadData()
+    }
   }
-  
   // MARK: UITableViewDataSourceプロトコルのメソッド
   // データの数（＝セルの数）を返すメソッド
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
